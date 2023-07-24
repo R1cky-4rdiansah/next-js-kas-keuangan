@@ -1,4 +1,14 @@
-html,
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@import "primereact/resources/themes/lara-light-indigo/theme.css";     
+    
+
+@import "primereact/resources/primereact.min.css";                                       
+        
+
+\html,
 body {
   padding: 0;
   margin: 0;
