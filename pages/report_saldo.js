@@ -131,7 +131,7 @@ const report_saldo = ({ data_kas }) => {
         <Column colSpan={3} footer="Total" />
         <Column footer={totalPemasukkan} />
         <Column footer={totalPengeluaran} />
-        <Column footer={totalSaldo} />
+        {/* <Column footer={totalSaldo} /> */}
         <Column />
       </Row>
     </ColumnGroup>

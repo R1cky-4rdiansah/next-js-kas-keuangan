@@ -12,6 +12,7 @@ import Swal from "sweetalert2";
 import { ColumnGroup } from "primereact/columngroup";
 import { Row } from "primereact/row";
 import { read, utils, writeFileXLSX } from "xlsx";
+import ModalGambar from "../pages/modal_gambar.js";
 
 export async function getServerSideProps(ctx) {
   const token = ctx.req.cookies.token;
@@ -78,6 +79,7 @@ const report_pengeluaran = ({ data_kas, level }) => {
       delete data_exel[i].id_kas;
       delete data_exel[i].saldo;
       delete data_exel[i].pemasukkan;
+      delete data_exel[i].gambar;
       delete data_exel[i].created_at;
       delete data_exel[i].updated_at;
     }
@@ -93,28 +95,19 @@ const report_pengeluaran = ({ data_kas, level }) => {
   //gambar
   const showImage = useCallback((data) => {
     return (
-      <div>
-        <a
-          href={`${process.env.NEXT_PUBLIC_API_BACKEND}/bukti_kas/${data.gambar}`}
-          target="_blank"
-        >
-          <img
-            src={`${process.env.NEXT_PUBLIC_API_BACKEND}/bukti_kas/${data.gambar}`}
-            width="150"
-            className="rounded-3"
-          />
-        </a>
-      </div>
+      <>
+        <ModalGambar id_kas={data.id_kas} />
+      </>
     );
   }, []);
 
   //Edit
   const showEdit = useCallback((data) => {
     return (
-      <div className="d-flex justify-content-around align-items-center">
+      <div className="d-flex justify-content-between align-items-center">
         <Modal_edit_pengeluaran setAllData={setAllData} item={data} />
         <button
-          className="btn btn-sm btn-danger border-0 shadow-sm"
+          className="btn btn-sm btn-danger border-0 shadow-sm ms-2"
           onClick={() => hapusProduk(data.id_kas)}
         >
           <FaTrash />
@@ -309,7 +302,7 @@ const report_pengeluaran = ({ data_kas, level }) => {
                   <Column
                     field="deskripsi"
                     header="Deskripsi"
-                    style={{ width: "25%" }}
+                    style={{ width: "35%" }}
                   ></Column>
                   <Column
                     body={Rupiahs2}
@@ -319,7 +312,7 @@ const report_pengeluaran = ({ data_kas, level }) => {
                   <Column
                     header="Bukti"
                     body={showImage}
-                    style={{ width: "20%" }}
+                    style={{ width: "10%" }}
                   ></Column>
                   {level == "admin" && (
                     <Column

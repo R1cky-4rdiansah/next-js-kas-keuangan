@@ -37,27 +37,36 @@ export async function getServerSideProps(ctx) {
 }
 
 const input_pengeluaran = ({ level }) => {
-
   const [tanggal, setTanggal] = useState(new Date());
-  const [gambar, setGambar] = useState("");
+  const [gambar, setGambar] = useState([]);
   const [deskripsi, setDeskripsi] = useState("");
   const [pengeluaran, setPengeluaran] = useState(0);
 
   const [validation, setValidation] = useState({});
 
   const fileChange = (e) => {
-    const image = e.target.files[0];
+    const image = Array.from(e.target.files);
 
-    if (!image.type.match("image.*")) {
-      setGambar("salah");
-    }
-
-    setGambar(image);
+    image.reverse().forEach((file, i) => {
+      if (file.type.match("image.*")) {
+        setGambar((item) => [...item, file]);
+      } else {
+        Swal.fire({
+          title: `Gambar ke ${i + 1} bukan tipe image*`,
+          text: "Mohon untuk mengisi file dengan gambar",
+          icon: "error",
+          showConfirmButton: false,
+          timer: 3000,
+        });
+        setGambar([]);
+        e.target.value = null;
+      }
+    });
   };
 
   const upload = async (e) => {
     e.preventDefault();
-    if (!(tanggal && gambar && deskripsi && pengeluaran)) {
+    if (!(tanggal && deskripsi && pengeluaran) || gambar.length == 0) {
       Swal.fire({
         title: "Data Belum Lengkap",
         text: "Mohon untuk mengisi semua data",
@@ -70,7 +79,7 @@ const input_pengeluaran = ({ level }) => {
       } else {
         delete validation.tanggal;
       }
-      if (!gambar) {
+      if (gambar.length == 0) {
         setValidation((item) => ({ ...item, gambar: "Gambar harus terisi" }));
       } else {
         delete validation.gambar;
@@ -94,7 +103,9 @@ const input_pengeluaran = ({ level }) => {
     } else {
       setValidation({});
       const formdata = new FormData();
-      formdata.append("gambar", gambar);
+      gambar.forEach((image) => {
+        formdata.append("gambar", image);
+      });
       formdata.append("deskripsi", deskripsi);
       formdata.append("pengeluaran", pengeluaran);
 
@@ -110,9 +121,11 @@ const input_pengeluaran = ({ level }) => {
             showConfirmButton: false,
             timer: 2000,
           }).then(() => {
-            setGambar('');
-            setDeskripsi('');
+            setGambar([]);
+            setDeskripsi("");
             setPengeluaran(0);
+            const fileImage = document.getElementById("file-image");
+            fileImage.value = null;
           });
         })
         .catch((Error) => {
@@ -140,8 +153,10 @@ const input_pengeluaran = ({ level }) => {
                         <label className="font-bold block mb-2">Gambar</label>
                         <input
                           type="file"
+                          multiple
                           className="form-control form-control-lg"
                           onChange={fileChange}
+                          id="file-image"
                         />
                       </div>
                       {validation.gambar && (

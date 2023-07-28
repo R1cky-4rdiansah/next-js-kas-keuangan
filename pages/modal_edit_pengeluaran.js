@@ -124,7 +124,7 @@ const modal_edit_pengeluaran = ({ item, setAllData }) => {
         <FaPen />
       </Button>
 
-      <Modal show={show} onHide={() => setShow(false)}>
+      <Modal show={show} size="lg" onHide={() => setShow(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Edit Pengeluaran</Modal.Title>
         </Modal.Header>

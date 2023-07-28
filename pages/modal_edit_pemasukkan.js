@@ -4,10 +4,11 @@ import { useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import Cookies from "js-cookie";
-import { FaPen } from "react-icons/fa";
+import { FaDownload, FaPen, FaTrash } from "react-icons/fa";
 import { InputNumber } from "primereact/inputnumber";
 import { InputTextarea } from "primereact/inputtextarea";
 import { useCallback } from "react";
+import { Carousel } from "primereact/carousel";
 
 const modal_edit_pemasukkan = ({ item, setAllData }) => {
   const [show, setShow] = useState(false);
@@ -15,22 +16,61 @@ const modal_edit_pemasukkan = ({ item, setAllData }) => {
   const [pemasukkan, setPemasukkan] = useState(item.pemasukkan);
   const [gambar, setGambar] = useState("");
   const [deskripsi, setDeskripsi] = useState(item.deskripsi);
+  const [gambarAwal, setGambarAwal] = useState([]);
 
   const modal = useCallback(() => {
     setShow(!show);
     setPemasukkan(item.pemasukkan);
     setDeskripsi(item.deskripsi);
+    getGambar();
   }, [pemasukkan, deskripsi, show]);
 
   const [validation, setValidation] = useState({});
 
-  const fileChange = useCallback((e) => {
-    const dataGambar = e.target.files[0];
-    if (!dataGambar.type.match("image.*")) {
-      setGambar("");
-    }
-    setGambar(dataGambar);
-  }, [gambar]);
+  const getGambar = async () => {
+    const token = Cookies.get("token");
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_BACKEND}/api/gambar/${item.id_kas}`
+    );
+    const data = await response.data.data;
+    setGambarAwal(data);
+  };
+
+  const productTemplate = (item) => {
+    return (
+      <div className="m-2 text-center">
+        <center>
+          <a
+            target="_blank"
+            href={`${process.env.NEXT_PUBLIC_API_BACKEND}/bukti_kas/${item.gambar}`}
+          >
+            <img
+              src={`${process.env.NEXT_PUBLIC_API_BACKEND}/bukti_kas/${item.gambar}`}
+              className="w-full shadow-2"
+              style={{ height: "400px" }}
+            />
+          </a>
+        </center>
+        <div className=" mt-2 d-flex justify-content-center align-content-center">
+          <button className=" btn btn-danger">
+            <FaTrash />
+          </button>
+        </div>
+      </div>
+    );
+  };
+
+  const fileChange = useCallback(
+    (e) => {
+      const dataGambar = e.target.files[0];
+      if (!dataGambar.type.match("image.*")) {
+        setGambar("");
+      }
+      setGambar(dataGambar);
+    },
+    [gambar]
+  );
 
   const upload = async (e) => {
     e.preventDefault();
@@ -82,10 +122,12 @@ const modal_edit_pemasukkan = ({ item, setAllData }) => {
             showConfirmButton: false,
             timer: 2000,
           })
-            .then(async() => {
+            .then(async () => {
               const token = Cookies.get("token");
 
-              axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+              axios.defaults.headers.common[
+                "Authorization"
+              ] = `Bearer ${token}`;
               await axios
                 .post(
                   `${process.env.NEXT_PUBLIC_API_BACKEND}/api/report_pemasukkan`,
@@ -122,11 +164,22 @@ const modal_edit_pemasukkan = ({ item, setAllData }) => {
         <FaPen />
       </Button>
 
-      <Modal show={show} onHide={() => setShow(false)}>
+      <Modal show={show} size="lg" onHide={() => setShow(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Edit Pemasukkan</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          <div className="card">
+            <Carousel
+              value={gambarAwal}
+              numVisible={1}
+              numScroll={1}
+              orientation="vertical"
+              className="custom-carousel"
+              verticalViewPortHeight="450px"
+              itemTemplate={productTemplate}
+            />
+          </div>
           <form onSubmit={upload}>
             <div className="form-group mb-3">
               <label className="form-label fw-bold">Gambar</label>

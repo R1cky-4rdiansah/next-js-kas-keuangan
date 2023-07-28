@@ -14,9 +14,9 @@ export async function getServerSideProps(ctx) {
     );
     const data = await response.data.data;
     const data_saldo = await response.data.data_saldo.saldo;
-    const data_pemasukkan = await response.data.data_pemasukkan[0]
+    var data_pemasukkan = await response.data.data_pemasukkan[0]
       .jml_pemasukkan;
-    const data_pengeluaran = await response.data.data_pengeluaran[0]
+    var data_pengeluaran = await response.data.data_pengeluaran[0]
       .jml_pengeluaran;
     const data_tgl_grafik = await response.data.data_tgl_grafik.reverse();
     const data_grafik_nilai = await response.data.data_grafik_nilai.reverse();
@@ -24,6 +24,14 @@ export async function getServerSideProps(ctx) {
       await response.data.data_grafik_pemasukkan.reverse();
     const data_grafik_pengeluaran =
       await response.data.data_grafik_pengeluaran.reverse();
+
+      if(!data_pemasukkan){
+       data_pemasukkan = 0
+      }
+
+      if(!data_pengeluaran){
+        data_pengeluaran = 0
+      }
 
     return {
       props: {
