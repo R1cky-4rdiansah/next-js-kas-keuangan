@@ -9,7 +9,8 @@ import Cookies from "js-cookie";
 import { ColumnGroup } from "primereact/columngroup";
 import { Row } from "primereact/row";
 import { read, utils, writeFileXLSX } from "xlsx";
-import { useState } from "react";
+import { useCallback, useState } from "react";
+import ModalGambar from "../pages/modal_gambar.js";
 
 export async function getServerSideProps(ctx) {
   const token = ctx.req.cookies.token;
@@ -80,22 +81,13 @@ const report_saldo = ({ data_kas }) => {
   const newData = cariData(allData);
 
   //gambar
-  const showImage = (data) => {
+  const showImage = useCallback((data) => {
     return (
-      <div>
-        <a
-          href={`${process.env.NEXT_PUBLIC_API_BACKEND}/bukti_kas/${data.gambar}`}
-          target="_blank"
-        >
-          <img
-            src={`${process.env.NEXT_PUBLIC_API_BACKEND}/bukti_kas/${data.gambar}`}
-            width="150"
-            className="rounded-3"
-          />
-        </a>
-      </div>
+      <>
+        <ModalGambar id_kas={data.id_kas} />
+      </>
     );
-  };
+  });
 
   //Total Pemasukkan
   const totalPemasukkan = () => {
@@ -265,22 +257,22 @@ const report_saldo = ({ data_kas }) => {
                   <Column
                     body={Rupiahs1}
                     header="Pemasukkan(Rp)"
-                    style={{ width: "25%" }}
+                    style={{ width: "15%" }}
                   ></Column>
                   <Column
                     body={Rupiahs2}
                     header="Pengeluaran(Rp)"
-                    style={{ width: "25%" }}
+                    style={{ width: "15%" }}
                   ></Column>
                   <Column
                     body={Rupiahs3}
                     header="Saldo(Rp)"
-                    style={{ width: "25%" }}
+                    style={{ width: "15%" }}
                   ></Column>
                   <Column
                     header="Bukti"
                     body={showImage}
-                    style={{ width: "25%" }}
+                    style={{ width: "15%" }}
                   ></Column>
                 </DataTable>
               </div>

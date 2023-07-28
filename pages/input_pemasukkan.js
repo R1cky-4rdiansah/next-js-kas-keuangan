@@ -44,6 +44,7 @@ const input_pemasukkan = ({ level }) => {
   const [validation, setValidation] = useState({});
 
   const fileChange = (e) => {
+    setGambar([]);
     const image = Array.from(e.target.files);
 
     image.reverse().forEach((file, i) => {

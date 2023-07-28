@@ -245,6 +245,7 @@ const report_pemasukkan = ({ data_kas, level }) => {
                   <div className="d-flex justify-content-between align-items-center">
                     <Calendar
                       value={tanggal1}
+                      maxDate={new Date()}
                       style={{ width: "100%" }}
                       onChange={(e) => setTanggal1(e.value)}
                       dateFormat="yy-mm-dd"

@@ -14,7 +14,7 @@ const modal_edit_pemasukkan = ({ item, setAllData }) => {
   const [show, setShow] = useState(false);
 
   const [pemasukkan, setPemasukkan] = useState(item.pemasukkan);
-  const [gambar, setGambar] = useState("");
+  const [gambar, setGambar] = useState([]);
   const [deskripsi, setDeskripsi] = useState(item.deskripsi);
   const [gambarAwal, setGambarAwal] = useState([]);
 
@@ -30,11 +30,44 @@ const modal_edit_pemasukkan = ({ item, setAllData }) => {
   const getGambar = async () => {
     const token = Cookies.get("token");
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_BACKEND}/api/gambar/${item.id_kas}`
-    );
-    const data = await response.data.data;
-    setGambarAwal(data);
+    await axios
+      .get(`${process.env.NEXT_PUBLIC_API_BACKEND}/api/gambar/${item.id_kas}`)
+      .then((res) => {
+        const data = res.data.data;
+        setGambarAwal(data);
+      });
+  };
+
+  const hapusGambar = async (idGambar) => {
+    const token = Cookies.get("token");
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    await Swal.fire({
+      title: "Apakah anda yakin?",
+      text: "Anda yakin ingin menghapus gambar ini!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Hapus!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .post(
+            `${process.env.NEXT_PUBLIC_API_BACKEND}/api/hapus_gambar/${idGambar}`
+          )
+          .then(() => {
+            Swal.fire({
+              title: "Data Terhapus",
+              text: "Selamat, data anda telah terhapus",
+              icon: "success",
+              showConfirmButton: false,
+              timer: 2000,
+            }).then(async () => {
+              getGambar();
+            });
+          });
+      }
+    });
   };
 
   const productTemplate = (item) => {
@@ -53,7 +86,10 @@ const modal_edit_pemasukkan = ({ item, setAllData }) => {
           </a>
         </center>
         <div className=" mt-2 d-flex justify-content-center align-content-center">
-          <button className=" btn btn-danger">
+          <button
+            onClick={() => hapusGambar(item.id)}
+            className=" btn btn-danger"
+          >
             <FaTrash />
           </button>
         </div>
@@ -63,11 +99,24 @@ const modal_edit_pemasukkan = ({ item, setAllData }) => {
 
   const fileChange = useCallback(
     (e) => {
-      const dataGambar = e.target.files[0];
-      if (!dataGambar.type.match("image.*")) {
-        setGambar("");
-      }
-      setGambar(dataGambar);
+      setGambar([]);
+      const image = Array.from(e.target.files);
+
+      image.reverse().forEach((file, i) => {
+        if (file.type.match("image.*")) {
+          setGambar((item) => [...item, file]);
+        } else {
+          Swal.fire({
+            title: `Gambar ke ${i + 1} bukan tipe image*`,
+            text: "Mohon untuk mengisi file dengan gambar",
+            icon: "error",
+            showConfirmButton: false,
+            timer: 3000,
+          });
+          setGambar([]);
+          e.target.value = null;
+        }
+      });
     },
     [gambar]
   );
@@ -102,7 +151,9 @@ const modal_edit_pemasukkan = ({ item, setAllData }) => {
     } else {
       setValidation({});
       const formdata = new FormData();
-      formdata.append("gambar", gambar);
+      gambar.forEach((image) => {
+        formdata.append("gambar", image);
+      });
       formdata.append("pemasukkan", pemasukkan);
       formdata.append("deskripsi", deskripsi);
 
@@ -187,6 +238,7 @@ const modal_edit_pemasukkan = ({ item, setAllData }) => {
                 type="file"
                 className="form-control form-control-lg"
                 onChange={fileChange}
+                multiple
               />
             </div>
 

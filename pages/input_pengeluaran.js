@@ -5,7 +5,6 @@ import Swal from "sweetalert2";
 import { InputNumber } from "primereact/inputnumber";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Calendar } from "primereact/calendar";
-import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import { FaExclamationTriangle } from "react-icons/fa";
 
@@ -45,6 +44,7 @@ const input_pengeluaran = ({ level }) => {
   const [validation, setValidation] = useState({});
 
   const fileChange = (e) => {
+    setGambar([]);
     const image = Array.from(e.target.files);
 
     image.reverse().forEach((file, i) => {
