@@ -151,9 +151,17 @@ const modal_edit_pengeluaran = ({ item, setAllData }) => {
     } else {
       setValidation({});
       const formdata = new FormData();
+
+      // //upload node js
+      // gambar.forEach((image) => {
+      //   formdata.append("gambar", image);
+      // });
+
+      //upload laravel
       gambar.forEach((image) => {
-        formdata.append("gambar", image);
+        formdata.append("gambar[]", image);
       });
+
       formdata.append("pengeluaran", pengeluaran);
       formdata.append("deskripsi", deskripsi);
 

@@ -103,9 +103,17 @@ const input_pemasukkan = ({ level }) => {
     } else {
       setValidation({});
       const formdata = new FormData();
+
+      // //upload node js
+      // gambar.forEach((image) => {
+      //   formdata.append("gambar", image);
+      // });
+
+      //upload laravel
       gambar.forEach((image) => {
-        formdata.append("gambar", image);
+        formdata.append("gambar[]", image);
       });
+
       formdata.append("deskripsi", deskripsi);
       formdata.append("pemasukkan", pemasukkan);
 
