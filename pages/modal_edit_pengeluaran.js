@@ -89,6 +89,7 @@ const modal_edit_pengeluaran = ({ item, setAllData }) => {
           <button
             onClick={() => hapusGambar(item.id)}
             className=" btn btn-danger"
+            disabled={gambarAwal.length == 1 ? true : false}
           >
             <FaTrash />
           </button>
