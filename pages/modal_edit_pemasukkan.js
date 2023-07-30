@@ -71,7 +71,6 @@ const modal_edit_pemasukkan = ({ item, setAllData }) => {
   };
 
   const productTemplate = (item) => {
-    console.log(gambarAwal);
     return (
       <div className="m-2 text-center">
         <center>
@@ -154,15 +153,15 @@ const modal_edit_pemasukkan = ({ item, setAllData }) => {
       setValidation({});
       const formdata = new FormData();
 
-      // //upload node js
-      // gambar.forEach((image) => {
-      //   formdata.append("gambar", image);
-      // });
-
-      //upload laravel
+      //upload node js
       gambar.forEach((image) => {
-        formdata.append("gambar[]", image);
+        formdata.append("gambar", image);
       });
+
+      // //upload laravel
+      // gambar.forEach((image) => {
+      //   formdata.append("gambar[]", image);
+      // });
 
       formdata.append("pemasukkan", pemasukkan);
       formdata.append("deskripsi", deskripsi);

@@ -13,7 +13,8 @@ import { ColumnGroup } from "primereact/columngroup";
 import { Row } from "primereact/row";
 import { useCallback } from "react";
 import { read, utils, writeFileXLSX } from "xlsx";
-import ModalGambar from '../pages/modal_gambar.js'
+import ModalGambar from "../pages/modal_gambar.js";
+import { Spinner } from "react-bootstrap";
 
 export async function getServerSideProps(ctx) {
   const token = ctx.req.cookies.token;
@@ -51,6 +52,7 @@ const report_pemasukkan = ({ data_kas, level }) => {
   const [cari, setCari] = useState("");
   const [tanggal1, setTanggal1] = useState(new Date());
   const [tanggal2, setTanggal2] = useState(new Date());
+  const [load, setLoad] = useState(false);
 
   const handleCari = useCallback(
     (e) => {
@@ -157,6 +159,7 @@ const report_pemasukkan = ({ data_kas, level }) => {
 
   //Cari Report
   const cari_report = async () => {
+    setLoad(true);
     const tgl1 = tgl_format(tanggal1);
     const tgl2 = tgl_format(tanggal2);
 
@@ -174,9 +177,11 @@ const report_pemasukkan = ({ data_kas, level }) => {
       )
       .then((res) => {
         const data = res.data.data;
+        setLoad(false);
         setAllData(data);
       })
       .catch((Error) => {
+        setLoad(false);
         console.log(Error.response.data);
       });
   };
@@ -263,7 +268,19 @@ const report_pemasukkan = ({ data_kas, level }) => {
                       className=" rounded p-3 bg-slate-200 hover:bg-slate-100"
                       onClick={cari_report}
                     >
-                      <FaSearch className="text-dark" />
+                      {load == false ? (
+                        <FaSearch className="text-dark" />
+                      ) : (
+                        <Spinner
+                          variant="dark"
+                          animation="border"
+                          role="status"
+                          size="sm"
+                          as="span"
+                        >
+                          <span className="visually-hidden">Loading...</span>
+                        </Spinner>
+                      )}
                     </button>
                   </div>
                   <div className="d-flex">

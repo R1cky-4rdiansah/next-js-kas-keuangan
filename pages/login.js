@@ -6,13 +6,15 @@ import Router from "next/router";
 import Swal from "sweetalert2";
 import Cookies from "js-cookie";
 import RegisterForm from "./register";
-import homeWal from "../public/malamwoi.jpg";
+import homeWal from "../public/money.png";
+import { Spinner } from "react-bootstrap";
 
 const login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
   const [loginBtn, setLoginBtn] = useState(true);
+  const [load, setLoad] = useState(false);
 
   const showPassword = () => {
     setShowPass(!showPass);
@@ -31,6 +33,7 @@ const login = () => {
 
   const loginHandler = async (e) => {
     e.preventDefault();
+    setLoad(true);
     if (!(username && password)) {
       Swal.fire({
         title: "Data Belum Lengkap",
@@ -55,8 +58,10 @@ const login = () => {
       } else {
         delete validation.username;
       }
+      setLoad(false);
     } else {
       setValidation({});
+      setSalahAkun("");
       const formdata = new FormData();
       formdata.append("username", username);
       formdata.append("password", password);
@@ -67,17 +72,21 @@ const login = () => {
           const namaLogin = await res.data.data.name;
           Cookies.set("token", res.data.token);
           Cookies.set("id_user", res.data.data.id);
-          Swal.fire({
-            title: "Selamat Datang",
-            text: `Hai, ${namaLogin}`,
-            icon: "success",
-            showConfirmButton: false,
-            timer: 2000,
-          }).then(() => {
-            Router.push("/");
-          });
+          // Swal.fire({
+          //   title: "Selamat Datang",
+          //   text: `Hai, ${namaLogin}`,
+          //   icon: "success",
+          //   showConfirmButton: false,
+          //   timer: 2000,
+          // }).then(() => {
+          //   setLoad(false);
+          //   Router.push("/");
+          // });
+          setLoad(false);
+          Router.push("/");
         })
         .catch((error) => {
+          setLoad(false);
           setSalahAkun(error.response.data.message);
           console.log(error.response.data.message);
         });
@@ -114,12 +123,12 @@ const login = () => {
                             <button style={{ position: 'absolute', right: '4%', top: '2%', zIndex: 999 }} onClick={loginPage} className="btn btn-light">LOGIN</button> 
                         )
                     } */}
-            <div className="card border-0 rounded shadow-sm p-5">
-              <div className="card-body position-relative">
+            <div className="card border-0 rounded shadow p-5 bg-dark">
+              <div className="card-body position-relative ">
                 {loginBtn == true ? (
                   <>
                     <h4
-                      className="fw-bold text-center"
+                      className="fw-bold text-center text-white"
                       style={{ marginBottom: "50px" }}
                     >
                       LOGIN
@@ -177,7 +186,7 @@ const login = () => {
                               onClick={() => showPassword()}
                               id="flexCheckDefault"
                             />
-                            <label className="form-check-label">
+                            <label className="form-check-label fw-bold text-white">
                               Tampilkan Password
                             </label>
                           </div>
@@ -187,10 +196,22 @@ const login = () => {
                         <div className="col-12">
                           <button
                             type="submit"
-                            className="btn btn-dark"
+                            className="btn btn-light"
                             style={{ width: "100%" }}
                           >
-                            LOGIN
+                            {load == false ? (
+                              "LOGIN"
+                            ) : (
+                              <Spinner
+                                variant="dark"
+                                animation="border"
+                                role="status"
+                              >
+                                <span className="visually-hidden">
+                                  Loading...
+                                </span>
+                              </Spinner>
+                            )}
                           </button>
                         </div>
                       </div>

@@ -11,6 +11,7 @@ import { Row } from "primereact/row";
 import { read, utils, writeFileXLSX } from "xlsx";
 import { useCallback, useState } from "react";
 import ModalGambar from "../pages/modal_gambar.js";
+import { Spinner } from "react-bootstrap";
 
 export async function getServerSideProps(ctx) {
   const token = ctx.req.cookies.token;
@@ -43,6 +44,7 @@ const report_saldo = ({ data_kas }) => {
   const [cari, setCari] = useState("");
   const [tanggal1, setTanggal1] = useState(new Date());
   const [tanggal2, setTanggal2] = useState(new Date());
+  const [load, setLoad] = useState(false);
 
   //Export Data
   const downloadExcel = () => {
@@ -158,6 +160,7 @@ const report_saldo = ({ data_kas }) => {
   };
 
   const cari_report = async () => {
+    setLoad(true);
     const tgl1 = tgl_format(tanggal1);
     const tgl2 = tgl_format(tanggal2);
 
@@ -172,9 +175,11 @@ const report_saldo = ({ data_kas }) => {
       .post(`${process.env.NEXT_PUBLIC_API_BACKEND}/api/report_saldo`, formdata)
       .then((res) => {
         const data = res.data.data;
+        setLoad(false);
         setAllData(data);
       })
       .catch((Error) => {
+        setLoad(false);
         console.log(Error.response.data);
       });
   };
@@ -212,7 +217,19 @@ const report_saldo = ({ data_kas }) => {
                       className=" rounded p-3 bg-slate-200 hover:bg-slate-100"
                       onClick={cari_report}
                     >
-                      <FaSearch className="text-dark" />
+                      {load == false ? (
+                        <FaSearch className="text-dark" />
+                      ) : (
+                        <Spinner
+                          variant="dark"
+                          animation="border"
+                          role="status"
+                          size="sm"
+                          as="span"
+                        >
+                          <span className="visually-hidden">Loading...</span>
+                        </Spinner>
+                      )}
                     </button>
                   </div>
                   <div className="d-flex">

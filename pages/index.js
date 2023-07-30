@@ -26,11 +26,11 @@ export async function getServerSideProps(ctx) {
       await response.data.data_grafik_pengeluaran.reverse();
 
       if(!data_pemasukkan){
-       data_pemasukkan = 0
+       data_pemasukkan = 0;
       }
 
       if(!data_pengeluaran){
-        data_pengeluaran = 0
+        data_pengeluaran = 0;
       }
 
     return {
