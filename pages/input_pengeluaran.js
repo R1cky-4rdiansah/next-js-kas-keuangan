@@ -1,6 +1,6 @@
 import axios from "axios";
 import Layout from "../components/layout";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import Swal from "sweetalert2";
 import { InputNumber } from "primereact/inputnumber";
 import { InputTextarea } from "primereact/inputtextarea";
@@ -64,6 +64,15 @@ const input_pengeluaran = ({ level }) => {
     });
   };
 
+  //Format Tanggal
+  const tgl_format = useCallback((value) => {
+    const datetgl1 = ("0" + value.getDate()).slice(-2);
+    const monthtgl1 = ("0" + (value.getMonth() + 1)).slice(-2);
+    const yeartgl1 = value.getFullYear();
+
+    return yeartgl1 + "-" + monthtgl1 + "-" + datetgl1;
+  }, []);
+
   const upload = async (e) => {
     e.preventDefault();
     if (!(tanggal && deskripsi && pengeluaran) || gambar.length == 0) {
@@ -104,6 +113,8 @@ const input_pengeluaran = ({ level }) => {
       setValidation({});
       const formdata = new FormData();
 
+      const tgl = tgl_format(tanggal);
+
       const port = process.env.NEXT_PUBLIC_API_BACKEND;
       const getPort = port.split(":");
 
@@ -118,7 +129,7 @@ const input_pengeluaran = ({ level }) => {
           formdata.append("gambar[]", image);
         });
       }
-
+      formdata.append("tanggal", tgl);
       formdata.append("deskripsi", deskripsi);
       formdata.append("pengeluaran", pengeluaran);
 
@@ -137,6 +148,7 @@ const input_pengeluaran = ({ level }) => {
             setGambar([]);
             setDeskripsi("");
             setPengeluaran(0);
+            setTanggal(new Date());
             const fileImage = document.getElementById("file-image");
             fileImage.value = null;
           });
@@ -187,8 +199,8 @@ const input_pengeluaran = ({ level }) => {
                             value={tanggal}
                             style={{ width: "100%" }}
                             onChange={(e) => setTanggal(e.value)}
+                            maxDate={new Date()}
                             dateFormat="dd-mm-yy"
-                            disabled
                           />
                         </div>
                         <div className="col-8">
