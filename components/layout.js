@@ -58,7 +58,7 @@ const layout = ({ children }) => {
         <aside
           className="bg-slate-50 w-full md:w-60"
           style={{
-            zIndex: "999",
+            zIndex: "10",
             marginTop: "10px",
             borderRadius: "8px",
             marginBottom: "10px",

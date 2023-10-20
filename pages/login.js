@@ -82,7 +82,6 @@ const login = () => {
           //   setLoad(false);
           //   Router.push("/");
           // });
-          setLoad(false);
           Router.push("/");
         })
         .catch((error) => {
