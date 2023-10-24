@@ -3,7 +3,16 @@ import { Spinner } from "react-bootstrap";
 const loader = () => {
   return (
     <div className="spiner-screen">
-      <Spinner animation="grow" size="lg" variant="dark" />
+      <div class="lds-roller">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
     </div>
   );
 };
