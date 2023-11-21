@@ -134,7 +134,7 @@ const login = () => {
                     </h4>
                     <form onSubmit={loginHandler}>
                       <div className="row">
-                        <div className="col-md-12 mb-2">
+                        <div className="col-12 mb-2">
                           <div className="mb-3">
                             <input
                               autoComplete="on"
@@ -154,7 +154,7 @@ const login = () => {
                         </div>
                       </div>
                       <div className="row">
-                        <div className="col-md-12 mb-2">
+                        <div className="col-12 mb-2">
                           <div className="mb-3">
                             <input
                               autoComplete="on"
@@ -177,7 +177,7 @@ const login = () => {
                         <div className="alert alert-danger">{salahAkun}</div>
                       )}
                       <div className="row">
-                        <div className="col-md-12 mb-2">
+                        <div className="col-12 mb-2">
                           <div className="form-check">
                             <input
                               className="form-check-input"

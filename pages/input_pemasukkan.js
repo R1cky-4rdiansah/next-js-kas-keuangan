@@ -165,11 +165,11 @@ const input_pemasukkan = ({ level }) => {
       {level == "admin" ? (
         <>
           <div
-            className="container"
+            className="container-fluid"
             style={{ paddingTop: "10px", paddingBottom: "10px" }}
           >
-            <div className="row" style={{ width: "70%" }}>
-              <div className="col-md-12">
+            <div className="row w-100">
+              <div className="col-lg-8 col-12">
                 <h3>Input Pemasukkan Kas </h3>
                 <div className="card border-0 rounded shadow-sm">
                   <div className="card-body">
@@ -191,7 +191,7 @@ const input_pemasukkan = ({ level }) => {
                       )}
 
                       <div className="form-group mb-3 row">
-                        <div className="col-4">
+                        <div className="col-lg-4 col-12">
                           <label className="font-bold block mb-2">
                             Tanggal
                           </label>
@@ -203,7 +203,7 @@ const input_pemasukkan = ({ level }) => {
                             dateFormat="dd-mm-yy"
                           />
                         </div>
-                        <div className="col-8">
+                        <div className="col-lg-8 col-12">
                           <label className="font-bold block mb-2">
                             Pemasukkan
                           </label>
@@ -259,11 +259,11 @@ const input_pemasukkan = ({ level }) => {
         <>
           {/** Page Blocking */}
           <div
-            className="container d-flex justify-content-center align-items-center"
+            className="container-fluid d-flex justify-content-center align-items-center"
             style={{ minHeight: "100vh" }}
           >
             <div className="row" style={{ width: "70%" }}>
-              <div className="col-md-12">
+              <div className="col-12">
                 <div className="card bg-dark rounded shadow-sm p-2">
                   <div className="card-body rounded text-center p-5 text-white">
                     <center>

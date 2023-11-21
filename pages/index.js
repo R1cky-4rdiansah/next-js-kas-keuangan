@@ -14,8 +14,7 @@ export async function getServerSideProps(ctx) {
     );
     const data = await response.data.data;
     const data_saldo = await response.data.data_saldo.saldo;
-    var data_pemasukkan = await response.data.data_pemasukkan[0]
-      .jml_pemasukkan;
+    var data_pemasukkan = await response.data.data_pemasukkan[0].jml_pemasukkan;
     var data_pengeluaran = await response.data.data_pengeluaran[0]
       .jml_pengeluaran;
     const data_tgl_grafik = await response.data.data_tgl_grafik.reverse();
@@ -25,13 +24,13 @@ export async function getServerSideProps(ctx) {
     const data_grafik_pengeluaran =
       await response.data.data_grafik_pengeluaran.reverse();
 
-      if(!data_pemasukkan){
-       data_pemasukkan = 0;
-      }
+    if (!data_pemasukkan) {
+      data_pemasukkan = 0;
+    }
 
-      if(!data_pengeluaran){
-        data_pengeluaran = 0;
-      }
+    if (!data_pengeluaran) {
+      data_pengeluaran = 0;
+    }
 
     return {
       props: {
@@ -109,15 +108,16 @@ const idPage = ({
         labels: {
           boxWidth: 80,
           fontColor: "black",
-        },
+        },        
       },
+      maintainAspectRatio: false
     };
 
     var ctx = document.getElementById("myChart").getContext("2d");
     var myChart = new Chart(ctx, {
       type: "bar",
       data: speedData,
-      options: chartOptions,
+      options: chartOptions,      
     });
   }, []);
 
@@ -169,11 +169,11 @@ const idPage = ({
   return (
     <Layout>
       <div
-        className="container"
+        className="container-fluid"
         style={{ paddingTop: "10px", paddingBottom: "10px" }}
       >
         <div className="row" style={{ width: "100%" }}>
-          <div className=" col-4 mb-3">
+          <div className=" col-lg-4 col-12 mb-3">
             <div className="card" style={{ borderLeft: "4px solid #1cc88a" }}>
               <div
                 className="card-body d-flex flex-column justify-content-center p-4"
@@ -187,7 +187,7 @@ const idPage = ({
               </div>
             </div>
           </div>
-          <div className=" col-4 mb-3">
+          <div className=" col-lg-4 col-12 mb-3">
             <div className="card" style={{ borderLeft: "4px solid #46bed0" }}>
               <div
                 className="card-body d-flex flex-column justify-content-center p-4"
@@ -201,7 +201,7 @@ const idPage = ({
               </div>
             </div>
           </div>
-          <div className=" col-4 mb-3">
+          <div className=" col-lg-4 col-12 mb-3">
             <div className="card" style={{ borderLeft: "4px solid #f6c23e" }}>
               <div
                 className="card-body d-flex flex-column justify-content-center p-4"
@@ -215,7 +215,7 @@ const idPage = ({
               </div>
             </div>
           </div>
-          {/* <div className="col-md-12 mb-3">
+          {/* <div className="col-12 mb-3">
             <div className="card border-0 shadow-sm rounded-3">
               <div className="card-body"> */}
           {/* <Link href="/simpan">
@@ -304,7 +304,9 @@ const idPage = ({
             </div>
           </div> */}
           <div className=" col-12 mb-3">
-            <div className="card">
+            <div
+              className="card"
+            >
               <canvas id="myChart"></canvas>
             </div>
           </div>

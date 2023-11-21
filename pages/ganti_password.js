@@ -93,11 +93,11 @@ const ganti_password = () => {
   return (
     <Layout>
       <div
-        className="container"
+        className="container-fluid"
         style={{ paddingTop: "10px", paddingBottom: "10px" }}
       >
-        <div className="row" style={{ width: "70%" }}>
-          <div className="col-md-12">
+        <div className="row">
+          <div className=" col-lg-8 col-12">
             <h3> Reset Password </h3>
             <div className="card border-0 rounded shadow-sm">
               <div className="card-body">
@@ -133,7 +133,7 @@ const ganti_password = () => {
                     </div>
                   )}
                   <div className="row">
-                    <div className="col-md-12 mb-2">
+                    <div className="col-12 mb-2">
                       <div className="form-check">
                         <input
                           className="form-check-input"

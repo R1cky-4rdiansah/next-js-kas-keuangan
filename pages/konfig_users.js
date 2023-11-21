@@ -199,26 +199,29 @@ const konfig_users = ({
   return (
     <Layout>
       <div
-        className="container"
+        className="container-fluid"
         style={{ paddingTop: "10px", paddingBottom: "10px" }}
       >
-        <div className="row" style={{ width: "100%" }}>
-          <div className="col-md-12 mb-3">
+        <div className="row">
+          <div className="col-12 mb-3">
             <h3>Konfigurasi Users </h3>
             <div className="card border-0 shadow-sm rounded-3 mb-3">
               <div className="card-body">
                 <form onSubmit={updateUser} className="row d-flex">
                   <div className=" col-4">
-                    <FaUser
-                      className=" text-slate-700"
-                      style={{
-                        padding: "20px",
-                        fontSize: "240px",
-                        border: "2px solid #e2e8f0",
-                        borderRadius: "5px",
-                        width: "100%",
-                      }}
-                    />
+                    <div className=" d-flex justify-content-center align-items-center">
+                      <FaUser
+                        id="user-logo"
+                        className=" text-slate-700"
+                        style={{
+                          fontSize: "200px",
+                          padding: "10px",
+                          border: "2px solid #e2e8f0",
+                          borderRadius: "5px",
+                          width: "100%",
+                        }}
+                      />
+                    </div>
                   </div>
                   <div className=" col-4">
                     <div className="form-group mb-3">
@@ -259,9 +262,7 @@ const konfig_users = ({
                         defaultValue={levelUser}
                         onChange={(e) => setLevelUser(e.target.value)}
                       >
-                        <option value="" >
-                          Pilih Level
-                        </option>
+                        <option value="">Pilih Level</option>
                         <option value="admin">Admin</option>
                         <option value="user">User</option>
                       </select>
@@ -285,6 +286,7 @@ const konfig_users = ({
                       type="search"
                       placeholder="Cari..."
                       onChange={handleCari}
+                      style={{ width: "120px" }}
                     />
                   </form>
                 </div>

@@ -103,7 +103,7 @@ const register = ({ loginPage }) => {
       </h4>
       <form onSubmit={registerHandler}>
         <div className="row">
-          <div className="col-md-12 mb-2">
+          <div className="col-12 mb-2">
             <div className="mb-3">
               <input
                 type="text"
@@ -118,7 +118,7 @@ const register = ({ loginPage }) => {
               <div className="alert alert-danger">{validation.name}</div>
             )}
           </div>
-          <div className="col-md-12 mb-2">
+          <div className="col-12 mb-2">
             <div className="mb-3">
               <input
                 type="email"
@@ -135,7 +135,7 @@ const register = ({ loginPage }) => {
           </div>
         </div>
         <div className="row">
-          <div className="col-md-12 mb-2">
+          <div className="col-12 mb-2">
             <div className="mb-3">
               <input
                 type={showPass ? "text" : "password"}
@@ -150,7 +150,7 @@ const register = ({ loginPage }) => {
               <div className="alert alert-danger">{validation.password}</div>
             )}
           </div>
-          <div className="col-md-12 mb-2">
+          <div className="col-12 mb-2">
             <div className="mb-3">
               <input
                 type={showPass ? "text" : "password"}
@@ -172,7 +172,7 @@ const register = ({ loginPage }) => {
           )}
         </div>
         <div className="row">
-          <div className="col-md-12 mb-2">
+          <div className="col-12 mb-2">
             <div className="form-check">
               <input
                 className="form-check-input"

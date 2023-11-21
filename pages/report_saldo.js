@@ -187,32 +187,36 @@ const report_saldo = ({ data_kas }) => {
   return (
     <Layout>
       <div
-        className="container"
+        className="container-fluid"
         style={{ paddingTop: "10px", paddingBottom: "10px" }}
       >
         <div className="row" style={{ width: "100%" }}>
-          <div className="col-md-12 mb-3">
+          <div className="col-12 mb-3">
             <h3>Report Saldo Kas </h3>
             <div className="card border-0 shadow-sm rounded-3">
               <div className="card-body">
-                <div className="d-flex justify-content-between align-items-center">
-                  <div className="d-flex justify-content-between align-items-center">
-                    <Calendar
-                      value={tanggal1}
-                      style={{ width: "100%" }}
-                      onChange={(e) => setTanggal1(e.value)}
-                      dateFormat="yy-mm-dd"
-                      maxDate={new Date()}
-                    />
-                    <span className="mx-2"> s/d </span>
-                    <Calendar
-                      value={tanggal2}
-                      minDate={tanggal1}
-                      style={{ width: "100%" }}
-                      onChange={(e) => setTanggal2(e.value)}
-                      dateFormat="yy-mm-dd"
-                      className="mr-3"
-                    />
+                <div
+                  className="d-lg-flex d-block justify-content-between align-items-center"
+                >
+                  <div className="d-flex py-1 align-items-center">
+                    <div>
+                      <Calendar
+                        value={tanggal1}
+                        style={{ width: "120px" }}
+                        onChange={(e) => setTanggal1(e.value)}
+                        dateFormat="yy-mm-dd"
+                        maxDate={new Date()}
+                      />
+                      <span className="mx-2"> s/d </span>
+                      <Calendar
+                        value={tanggal2}
+                        minDate={tanggal1}
+                        style={{ width: "120px" }}
+                        onChange={(e) => setTanggal2(e.value)}
+                        dateFormat="yy-mm-dd"
+                        className="mr-3"
+                      />{" "}
+                    </div>
                     <button
                       className=" rounded p-3 bg-slate-200 hover:bg-slate-100"
                       onClick={cari_report}
@@ -232,7 +236,7 @@ const report_saldo = ({ data_kas }) => {
                       )}
                     </button>
                   </div>
-                  <div className="d-flex">
+                  <div id="cari2" className="d-flex py-1 justify-content-between">
                     <button
                       className=" rounded p-3 bg-green-400 hover:bg-green-300 mr-3"
                       onClick={downloadExcel}

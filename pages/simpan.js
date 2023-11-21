@@ -60,7 +60,7 @@ const simpan = () => {
         }}
       >
         <div className="row" style={{ width: "80%" }}>
-          <div className="col-md-12">
+          <div className="col-12">
             <div className="card border-0 rounded shadow-sm">
               <div className="card-body">
                 <form onSubmit={upload}>

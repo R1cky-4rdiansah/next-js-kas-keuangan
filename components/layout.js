@@ -47,16 +47,16 @@ const layout = ({ children }) => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-200">
+    <div className=" w-full h-full flex flex-col bg-slate-200">
       <Head>
         <title>Project Next JS</title>
       </Head>
       <header className="bg-slate-950 top-0 h-14 flex justify-center items-center font-semibold uppercase text-white">
         Project Next JS
       </header>
-      <div className="flex flex-col md:flex-row flex-1">
+      <div className="flex flex-row">
         <aside
-          className="bg-slate-50 w-full md:w-60"
+          className="bg-slate-50 w-20 lg:w-60"
           style={{
             zIndex: "10",
             marginTop: "10px",
@@ -82,10 +82,9 @@ const layout = ({ children }) => {
                 style={{ fontSize: "100px" }}
               />
             </div>
-            <ul>
+            <ul className="m-0 px-0 py-2">
               <li
                 style={{
-                  marginLeft: "-12%",
                   marginTop: "10px",
                   marginBottom: "10px",
                   marginRight: "6px",
@@ -114,7 +113,6 @@ const layout = ({ children }) => {
               </li>
               <li
                 style={{
-                  marginLeft: "-13%",
                   marginTop: "10px",
                   marginBottom: "10px",
                   marginRight: "6px",
@@ -129,7 +127,6 @@ const layout = ({ children }) => {
               </li>
               <li
                 style={{
-                  marginLeft: "-12%",
                   marginTop: "10px",
                   marginBottom: "10px",
                   marginRight: "6px",
@@ -158,7 +155,6 @@ const layout = ({ children }) => {
               </li>
               <li
                 style={{
-                  marginLeft: "-12%",
                   marginTop: "10px",
                   marginBottom: "10px",
                   marginRight: "6px",
@@ -187,7 +183,6 @@ const layout = ({ children }) => {
               </li>
               <li
                 style={{
-                  marginLeft: "-13%",
                   marginTop: "10px",
                   marginBottom: "10px",
                   marginRight: "6px",
@@ -202,7 +197,6 @@ const layout = ({ children }) => {
               </li>
               <li
                 style={{
-                  marginLeft: "-12%",
                   marginTop: "10px",
                   marginBottom: "10px",
                   marginRight: "6px",
@@ -231,7 +225,6 @@ const layout = ({ children }) => {
               </li>
               <li
                 style={{
-                  marginLeft: "-12%",
                   marginTop: "10px",
                   marginBottom: "10px",
                   marginRight: "6px",
@@ -260,7 +253,6 @@ const layout = ({ children }) => {
               </li>
               <li
                 style={{
-                  marginLeft: "-12%",
                   marginTop: "10px",
                   marginBottom: "10px",
                   marginRight: "6px",
@@ -289,7 +281,6 @@ const layout = ({ children }) => {
               </li>
               <li
                 style={{
-                  marginLeft: "-13%",
                   marginTop: "10px",
                   marginBottom: "10px",
                   marginRight: "6px",
@@ -304,7 +295,6 @@ const layout = ({ children }) => {
               </li>
               <li
                 style={{
-                  marginLeft: "-12%",
                   marginTop: "10px",
                   marginBottom: "10px",
                   marginRight: "6px",
@@ -333,7 +323,6 @@ const layout = ({ children }) => {
               </li>
               <li
                 style={{
-                  marginLeft: "-12%",
                   marginTop: "10px",
                   marginBottom: "10px",
                   marginRight: "6px",
@@ -356,7 +345,6 @@ const layout = ({ children }) => {
               </li>
               <li
                 style={{
-                  marginLeft: "-12%",
                   marginTop: "10px",
                   marginBottom: "10px",
                   marginRight: "6px",
@@ -381,7 +369,7 @@ const layout = ({ children }) => {
             </ul>
           </nav>
         </aside>
-        <main className="flex-1">{children}</main>
+        <main className="flex-1 overflow-auto">{children}</main>
       </div>
     </div>
   );

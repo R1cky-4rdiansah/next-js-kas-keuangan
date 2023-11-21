@@ -250,7 +250,7 @@ const tambah_users = ({ setAllData }) => {
             )}
 
             <div className="row">
-              <div className="col-md-12 mb-2">
+              <div className="col-12 mb-2">
                 <div className="form-check">
                   <input
                     className="form-check-input"
