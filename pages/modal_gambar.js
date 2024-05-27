@@ -35,7 +35,7 @@ const modalGambar = ({ id_kas, page }) => {
           >
             <img
               src={`${process.env.NEXT_PUBLIC_API_BACKEND}/bukti_kas/${item.gambar}`}
-              className="w-full shadow-2"
+              className="w-full object-contain bg-slate-200 shadow-2"
               style={{ height: "400px" }}
             />
           </a>
