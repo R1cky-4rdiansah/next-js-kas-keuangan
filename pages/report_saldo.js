@@ -15,6 +15,10 @@ import { Spinner } from "react-bootstrap";
 
 export async function getServerSideProps(ctx) {
   const token = ctx.req.cookies.token;
+  const userAgent = ctx.req.headers["user-agent"];
+  const tesView = userAgent.match(
+    /Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i
+  );
 
   if (token) {
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
@@ -26,6 +30,7 @@ export async function getServerSideProps(ctx) {
     return {
       props: {
         data_kas: data,
+        tesView,
       },
     };
   }
@@ -39,7 +44,7 @@ export async function getServerSideProps(ctx) {
   }
 }
 
-const report_saldo = ({ data_kas }) => {
+const report_saldo = ({ data_kas, tesView }) => {
   const [allData, setAllData] = useState(data_kas);
   const [cari, setCari] = useState("");
   const [tanggal1, setTanggal1] = useState(new Date());
@@ -184,120 +189,241 @@ const report_saldo = ({ data_kas }) => {
       });
   };
 
+  const showContent = (e) => {
+    const content = e.currentTarget;
+    const nextDiv = content.children[2];
+    if (!nextDiv.classList.contains("show-content")) {
+      nextDiv.hidden = false;
+      nextDiv.classList.add("show-content");
+    } else {
+      nextDiv.hidden = true;
+      nextDiv.classList.remove("show-content");
+    }
+  };
+
+  if (tesView) {
+    return (
+      <Layout>
+        <div
+          className="container-fluid min-h-screen"
+          style={{ paddingTop: "10px", paddingBottom: "10px" }}
+        >
+          <h3>Report Saldo </h3>
+          <div className="card border-0 shadow-sm rounded-3">
+            <div className="card-body">
+              <div className="d-lg-flex d-block justify-content-between align-items-center">
+                <div className="d-flex py-1 gap-2 align-items-center">
+                  <Calendar
+                    value={tanggal1}
+                    maxDate={new Date()}
+                    onChange={(e) => setTanggal1(e.value)}
+                    dateFormat="yy-mm-dd"
+                    className="flex-1"
+                  />
+                  <Calendar
+                    value={tanggal2}
+                    minDate={tanggal1}
+                    onChange={(e) => setTanggal2(e.value)}
+                    dateFormat="yy-mm-dd"
+                    className="flex-1"
+                  />{" "}
+                  <button
+                    className=" rounded p-3 bg-slate-200 hover:bg-slate-100"
+                    onClick={cari_report}
+                  >
+                    {load == false ? (
+                      <FaSearch className="text-dark" />
+                    ) : (
+                      <Spinner
+                        variant="dark"
+                        animation="border"
+                        role="status"
+                        size="sm"
+                        as="span"
+                      >
+                        <span className="visually-hidden">Loading...</span>
+                      </Spinner>
+                    )}
+                  </button>
+                </div>
+                <div className="d-flex py-1 justify-content-between gap-2">
+                  <InputText
+                    type="search"
+                    placeholder="Cari..."
+                    onChange={handleCari}
+                    className="w-full"
+                  />
+                  <button
+                    className=" rounded p-3 bg-green-400 hover:bg-green-300"
+                    onClick={downloadExcel}
+                  >
+                    <FaFileExcel className="text-white" />
+                  </button>
+                </div>
+              </div>
+              <div className="w-full mt-3 flex flex-col gap-2">
+                {newData.map((val, i) => (
+                  <>
+                    <div
+                      key={i}
+                      className="w-full bg-blue-50 rounded-md p-2 relative flex flex-col gap-1"
+                      type="button"
+                      onClick={(e) => showContent(e)}
+                    >
+                      <div className="flex justify-between items-center gap-1">
+                        <div className="flex flex-col">
+                          <span className="text-xs text-gray-500">
+                            {val.tanggal}
+                          </span>
+                          <p className="text-sm font-semibold m-0">
+                            {val.deskripsi}
+                          </p>
+                        </div>
+                        <div className="d-flex align-items-center">
+                          <p className="text-md font-semibold m-0">
+                            {RupiahFormat(
+                              val.pemasukkan == 0
+                                ? val.pengeluaran
+                                : val.pemasukkan
+                            )}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <p className="text-xs m-0">
+                          {val.pemasukkan == 0 ? "Pengeluaran" : "Pemasukkan"}
+                        </p>
+                        <p className="text-xs m-0">
+                          Saldo : {RupiahFormat(val.saldo)}
+                        </p>
+                      </div>
+                      <div
+                        id={`konten_${val.id_kas}`}
+                        className="position-absolute left-0 top-0 right-0 bottom-0"
+                        hidden
+                      >
+                        <div className="d-flex w-full h-full gap-2 bg-blue-50 justify-center items-center z-10">
+                          <ModalGambar id_kas={val.id_kas} />
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
   return (
     <Layout>
       <div
-        className="container-fluid"
+        className="container-fluid min-h-screen"
         style={{ paddingTop: "10px", paddingBottom: "10px" }}
       >
-        <div className="row" style={{ width: "100%" }}>
-          <div className="col-12 mb-3">
-            <h3>Report Saldo Kas </h3>
-            <div className="card border-0 shadow-sm rounded-3">
-              <div className="card-body">
-                <div
-                  className="d-lg-flex d-block justify-content-between align-items-center"
-                >
-                  <div className="d-flex py-1 align-items-center">
-                    <div>
-                      <Calendar
-                        value={tanggal1}
-                        style={{ width: "120px" }}
-                        onChange={(e) => setTanggal1(e.value)}
-                        dateFormat="yy-mm-dd"
-                        maxDate={new Date()}
-                      />
-                      <span className="mx-2"> s/d </span>
-                      <Calendar
-                        value={tanggal2}
-                        minDate={tanggal1}
-                        style={{ width: "120px" }}
-                        onChange={(e) => setTanggal2(e.value)}
-                        dateFormat="yy-mm-dd"
-                        className="mr-3"
-                      />{" "}
-                    </div>
-                    <button
-                      className=" rounded p-3 bg-slate-200 hover:bg-slate-100"
-                      onClick={cari_report}
-                    >
-                      {load == false ? (
-                        <FaSearch className="text-dark" />
-                      ) : (
-                        <Spinner
-                          variant="dark"
-                          animation="border"
-                          role="status"
-                          size="sm"
-                          as="span"
-                        >
-                          <span className="visually-hidden">Loading...</span>
-                        </Spinner>
-                      )}
-                    </button>
-                  </div>
-                  <div id="cari2" className="d-flex py-1 justify-content-between">
-                    <button
-                      className=" rounded p-3 bg-green-400 hover:bg-green-300 mr-3"
-                      onClick={downloadExcel}
-                    >
-                      <FaFileExcel className="text-white" />
-                    </button>
-                    <InputText
-                      type="search"
-                      placeholder="Cari..."
-                      onChange={handleCari}
-                    />
-                  </div>
+        <div className="card border-0 shadow-sm rounded-3">
+          <div className="card-body">
+            <div className="d-lg-flex d-block justify-content-between align-items-center">
+              <div className="d-flex py-1 align-items-center">
+                <div>
+                  <Calendar
+                    value={tanggal1}
+                    style={{ width: "120px" }}
+                    onChange={(e) => setTanggal1(e.value)}
+                    dateFormat="yy-mm-dd"
+                    maxDate={new Date()}
+                  />
+                  <span className="mx-2"> s/d </span>
+                  <Calendar
+                    value={tanggal2}
+                    minDate={tanggal1}
+                    style={{ width: "120px" }}
+                    onChange={(e) => setTanggal2(e.value)}
+                    dateFormat="yy-mm-dd"
+                    className="mr-3"
+                  />{" "}
                 </div>
-                <DataTable
-                  className=" mt-3"
-                  value={newData}
-                  paginator
-                  rows={10}
-                  rowsPerPageOptions={[10, 25, 50]}
-                  tableStyle={{ minWidth: "50rem" }}
-                  let-i="rowIndex"
-                  footerColumnGroup={footerVal}
+                <button
+                  className=" rounded p-3 bg-slate-200 hover:bg-slate-100"
+                  onClick={cari_report}
                 >
-                  <Column
-                    header="No"
-                    style={{ width: "10%" }}
-                    body={(data, options) => options.rowIndex + 1}
-                  ></Column>
-                  <Column
-                    field="tanggal"
-                    header="Tanggal"
-                    style={{ width: "15%" }}
-                  ></Column>
-                  <Column
-                    field="deskripsi"
-                    header="Deskripsi"
-                    style={{ width: "25%" }}
-                  ></Column>
-                  <Column
-                    body={Rupiahs1}
-                    header="Pemasukkan(Rp)"
-                    style={{ width: "15%" }}
-                  ></Column>
-                  <Column
-                    body={Rupiahs2}
-                    header="Pengeluaran(Rp)"
-                    style={{ width: "15%" }}
-                  ></Column>
-                  <Column
-                    body={Rupiahs3}
-                    header="Saldo(Rp)"
-                    style={{ width: "15%" }}
-                  ></Column>
-                  <Column
-                    header="Bukti"
-                    body={showImage}
-                    style={{ width: "15%" }}
-                  ></Column>
-                </DataTable>
+                  {load == false ? (
+                    <FaSearch className="text-dark" />
+                  ) : (
+                    <Spinner
+                      variant="dark"
+                      animation="border"
+                      role="status"
+                      size="sm"
+                      as="span"
+                    >
+                      <span className="visually-hidden">Loading...</span>
+                    </Spinner>
+                  )}
+                </button>
+              </div>
+              <div id="cari2" className="d-flex py-1 justify-content-between">
+                <button
+                  className=" rounded p-3 bg-green-400 hover:bg-green-300 mr-3"
+                  onClick={downloadExcel}
+                >
+                  <FaFileExcel className="text-white" />
+                </button>
+                <InputText
+                  type="search"
+                  placeholder="Cari..."
+                  onChange={handleCari}
+                />
               </div>
             </div>
+            <DataTable
+              className=" mt-3"
+              value={newData}
+              paginator
+              rows={10}
+              rowsPerPageOptions={[10, 25, 50]}
+              tableStyle={{ minWidth: "50rem" }}
+              let-i="rowIndex"
+              footerColumnGroup={footerVal}
+            >
+              <Column
+                header="No"
+                style={{ width: "10%" }}
+                body={(data, options) => options.rowIndex + 1}
+              ></Column>
+              <Column
+                field="tanggal"
+                header="Tanggal"
+                style={{ width: "15%" }}
+              ></Column>
+              <Column
+                field="deskripsi"
+                header="Deskripsi"
+                style={{ width: "25%" }}
+              ></Column>
+              <Column
+                body={Rupiahs1}
+                header="Pemasukkan(Rp)"
+                style={{ width: "15%" }}
+              ></Column>
+              <Column
+                body={Rupiahs2}
+                header="Pengeluaran(Rp)"
+                style={{ width: "15%" }}
+              ></Column>
+              <Column
+                body={Rupiahs3}
+                header="Saldo(Rp)"
+                style={{ width: "15%" }}
+              ></Column>
+              <Column
+                header="Bukti"
+                body={showImage}
+                style={{ width: "15%" }}
+              ></Column>
+            </DataTable>
           </div>
         </div>
       </div>

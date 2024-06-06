@@ -49,11 +49,8 @@ const layout = ({ children }) => {
   return (
     <div className=" w-full h-full flex flex-col bg-slate-200">
       <Head>
-        <title>Project Next JS</title>
+        <title>Sistem Kas</title>
       </Head>
-      <header className="bg-slate-950 top-0 h-14 flex justify-center items-center font-semibold uppercase text-white">
-        Project Next JS
-      </header>
       <div className="flex flex-row">
         <aside
           className="bg-slate-50 w-20 lg:w-60"

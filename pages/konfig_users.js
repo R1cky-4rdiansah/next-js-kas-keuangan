@@ -13,6 +13,10 @@ import Modal_user from "./modal_user";
 export async function getServerSideProps(ctx) {
   const token = ctx.req.cookies.token;
   const id_user = ctx.req.cookies.id_user;
+  const userAgent = ctx.req.headers["user-agent"];
+  const tesView = userAgent.match(
+    /Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i
+  );
 
   if (token) {
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
@@ -35,6 +39,7 @@ export async function getServerSideProps(ctx) {
         username,
         email,
         id_user,
+        tesView,
       },
     };
   }
@@ -55,6 +60,7 @@ const konfig_users = ({
   username,
   email,
   id_user,
+  tesView,
 }) => {
   const [allData, setAllData] = useState(data_users);
   const [cari, setCari] = useState("");
@@ -92,6 +98,18 @@ const konfig_users = ({
         </button>
       </div>
     );
+  };
+
+  const showContent = (e) => {
+    const content = e.currentTarget;
+    const nextDiv = content.children[1];
+    if (!nextDiv.classList.contains("show-content")) {
+      nextDiv.hidden = false;
+      nextDiv.classList.add("show-content");
+    } else {
+      nextDiv.hidden = true;
+      nextDiv.classList.remove("show-content");
+    }
   };
 
   //Update User
@@ -196,10 +214,152 @@ const konfig_users = ({
     });
   };
 
+  if (tesView) {
+    return (
+      <Layout>
+        <div
+          className="container-fluid min-h-screen"
+          style={{ paddingTop: "10px", paddingBottom: "10px" }}
+        >
+          <div className="row">
+            <div className="col-12 mb-3">
+              <h3>Konfigurasi Users </h3>
+              <div className="card border-0 shadow-sm rounded-3 mb-3">
+                <div className="card-body">
+                  <form onSubmit={updateUser} className="row d-flex">
+                    <div className=" col-lg-4 col-6 lg:block hidden">
+                      <div className=" d-flex justify-content-center align-items-center">
+                        <FaUser
+                          id="user-logo"
+                          className=" text-slate-700"
+                          style={{
+                            fontSize: "200px",
+                            padding: "10px",
+                            border: "2px solid #e2e8f0",
+                            borderRadius: "5px",
+                            width: "100%",
+                          }}
+                        />
+                      </div>
+                    </div>
+                    <div className=" col-lg-4 col-6">
+                      <div className="form-group mb-3">
+                        <label className="form-label fw-bold">Nama</label>
+                        <InputText
+                          style={{ width: "100%" }}
+                          value={namaUser}
+                          onChange={(e) => setNama(e.target.value)}
+                          placeholder="Masukkan nama"
+                        />
+                      </div>
+                      <div className="form-group mb-3">
+                        <label className="form-label fw-bold">Username</label>
+                        <InputText
+                          style={{ width: "100%" }}
+                          value={usernameUser}
+                          onChange={(e) => setUsername(e.target.value)}
+                          placeholder="Masukkan Username"
+                        />
+                      </div>
+                    </div>
+                    <div className=" col-lg-4 col-6">
+                      <div className="form-group mb-3">
+                        <label className="form-label fw-bold">Email</label>
+                        <InputText
+                          style={{ width: "100%" }}
+                          value={emailUser}
+                          onChange={(e) => setEmail(e.target.value)}
+                          placeholder="Masukkan Email"
+                        />
+                      </div>
+                      <div className="form-group mb-3">
+                        <label className="form-label fw-bold">Level</label>
+                        <select
+                          disabled
+                          className="form-select form-select-lg"
+                          aria-label="Default select example"
+                          defaultValue={levelUser}
+                          onChange={(e) => setLevelUser(e.target.value)}
+                        >
+                          <option value="">Pilih Level</option>
+                          <option value="admin">Admin</option>
+                          <option value="user">User</option>
+                        </select>
+                      </div>
+                      <button
+                        type="submit"
+                        className="btn btn-warning text-white ms-auto d-flex align-items-center"
+                      >
+                        Update
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <div className="card border-0 shadow-sm rounded-3">
+                <div className="card-body">
+                  <div className="d-flex justify-content-between align-items-center">
+                    {level == "admin" && (
+                      <Tambah_users setAllData={setAllData} />
+                    )}
+                    <form className="d-flex">
+                      <InputText
+                        type="search"
+                        placeholder="Cari..."
+                        onChange={handleCari}
+                        style={{ width: "120px" }}
+                      />
+                    </form>
+                  </div>
+                  <div className="w-full mt-3 flex flex-col gap-2">
+                    {newData.map((val, i) => (
+                      <>
+                        <div
+                          key={i}
+                          className="w-full bg-blue-50 rounded-md p-2 relative"
+                        >
+                          <div className="flex justify-between items-center gap-1">
+                            <div className="flex flex-col">
+                              <p className="text-sm font-semibold m-0">
+                                {val.name}
+                              </p>
+                              <p className="text-gray-500 text-xs m-0">
+                                {val.username}
+                              </p>
+                              <p className="text-gray-500 text-xs m-0">
+                                {val.level}
+                              </p>
+                            </div>
+                            <div className="d-flex flex-column gap-1 justify-between items-center">
+                              <Modal_user
+                                item={newData[i]}
+                                setAllData={setAllData}
+                              />
+                              <button
+                                className="btn btn-sm btn-danger border-0 shadow-sm"
+                                onClick={() => hapusUser(val.id)}
+                              >
+                                <FaTrash />
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
   return (
     <Layout>
       <div
-        className="container-fluid"
+        className="container-fluid min-h-screen"
         style={{ paddingTop: "10px", paddingBottom: "10px" }}
       >
         <div className="row">
@@ -208,7 +368,7 @@ const konfig_users = ({
             <div className="card border-0 shadow-sm rounded-3 mb-3">
               <div className="card-body">
                 <form onSubmit={updateUser} className="row d-flex">
-                  <div className=" col-4">
+                  <div className=" col-lg-4 col-6 lg:block hidden">
                     <div className=" d-flex justify-content-center align-items-center">
                       <FaUser
                         id="user-logo"
@@ -223,7 +383,7 @@ const konfig_users = ({
                       />
                     </div>
                   </div>
-                  <div className=" col-4">
+                  <div className=" col-lg-4 col-6">
                     <div className="form-group mb-3">
                       <label className="form-label fw-bold">Nama</label>
                       <InputText
@@ -243,7 +403,7 @@ const konfig_users = ({
                       />
                     </div>
                   </div>
-                  <div className=" col-4">
+                  <div className=" col-lg-4 col-6">
                     <div className="form-group mb-3">
                       <label className="form-label fw-bold">Email</label>
                       <InputText

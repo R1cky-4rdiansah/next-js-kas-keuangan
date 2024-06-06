@@ -1,5 +1,5 @@
 import "../styles/globals.css";
-
+import Head from "next/head";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import Router from "next/router";
@@ -26,6 +26,7 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js" />
       <PrimeReactProvider>
         {loading && <Loader />}
         <Component {...pageProps} />

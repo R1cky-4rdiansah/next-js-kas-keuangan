@@ -49,7 +49,7 @@ const modalGambar = ({ id_kas, page }) => {
       <Button
         size="sm"
         variant="info"
-        style={{ color: "white", margin: "0 4px" }}
+        style={{ color: "white", margin: "0" }}
         onClick={modal}
       >
         <FaFileArchive />

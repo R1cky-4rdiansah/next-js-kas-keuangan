@@ -93,7 +93,7 @@ const ganti_password = () => {
   return (
     <Layout>
       <div
-        className="container-fluid"
+        className="container-fluid min-h-screen"
         style={{ paddingTop: "10px", paddingBottom: "10px" }}
       >
         <div className="row">

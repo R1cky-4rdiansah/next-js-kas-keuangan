@@ -11,6 +11,10 @@ import { FaExclamationTriangle } from "react-icons/fa";
 export async function getServerSideProps(ctx) {
   const token = ctx.req.cookies.token;
   const id_user = ctx.req.cookies.id_user;
+  const userAgent = ctx.req.headers["user-agent"];
+  const tesView = userAgent.match(
+    /Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i
+  );
 
   if (token) {
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
@@ -22,6 +26,7 @@ export async function getServerSideProps(ctx) {
     return {
       props: {
         level,
+        tesView,
       },
     };
   }
@@ -35,7 +40,7 @@ export async function getServerSideProps(ctx) {
   }
 }
 
-const input_pemasukkan = ({ level }) => {
+const input_pemasukkan = ({ level, tesView }) => {
   const [tanggal, setTanggal] = useState(new Date());
   const [gambar, setGambar] = useState([]);
   const [deskripsi, setDeskripsi] = useState("");
@@ -165,7 +170,7 @@ const input_pemasukkan = ({ level }) => {
       {level == "admin" ? (
         <>
           <div
-            className="container-fluid"
+            className="container-fluid min-h-screen"
             style={{ paddingTop: "10px", paddingBottom: "10px" }}
           >
             <div className="row w-100">
@@ -191,19 +196,20 @@ const input_pemasukkan = ({ level }) => {
                       )}
 
                       <div className="form-group mb-3 row">
-                        <div className="col-lg-4 col-12">
+                        <div className="col-md-6 col-12">
                           <label className="font-bold block mb-2">
                             Tanggal
                           </label>
                           <Calendar
                             value={tanggal}
+                            className="min-w-full"
                             style={{ width: "100%" }}
                             onChange={(e) => setTanggal(e.value)}
                             maxDate={new Date()}
                             dateFormat="dd-mm-yy"
                           />
                         </div>
-                        <div className="col-lg-8 col-12">
+                        <div className="col-md-6 col-12">
                           <label className="font-bold block mb-2">
                             Pemasukkan
                           </label>
@@ -262,20 +268,31 @@ const input_pemasukkan = ({ level }) => {
             className="container-fluid d-flex justify-content-center align-items-center"
             style={{ minHeight: "100vh" }}
           >
-            <div className="row" style={{ width: "70%" }}>
+            <div className="row" style={{ width: tesView ? "90%" : "70%" }}>
               <div className="col-12">
                 <div className="card bg-dark rounded shadow-sm p-2">
-                  <div className="card-body rounded text-center p-5 text-white">
+                  <div
+                    className={`card-body rounded text-center ${
+                      tesView ? "p-2" : "p-5"
+                    } text-white`}
+                  >
                     <center>
                       <FaExclamationTriangle
-                        fontSize={120}
+                        fontSize={tesView ? 80 : 120}
                         className=" text-danger mb-3"
                       />
                     </center>
-                    <h2>
-                      Mohon Maaf, Anda tidak diijinkan untuk mengakses halaman
-                      ini!
-                    </h2>
+                    {tesView ? (
+                      <h6>
+                        Mohon Maaf, Anda tidak diijinkan untuk mengakses halaman
+                        ini!
+                      </h6>
+                    ) : (
+                      <h2>
+                        Mohon Maaf, Anda tidak diijinkan untuk mengakses halaman
+                        ini!
+                      </h2>
+                    )}
                   </div>
                 </div>
               </div>
